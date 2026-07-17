@@ -31,7 +31,8 @@ El presente proyecto tiene como objetivo diseñar e implementar una infraestruct
 
 ## 2. Topología de red
 
-![Topología de red](./capturas/20_Topologia.png)
+![Topología de red](<img width="449" height="315" alt="20_Topologia" src="https://github.com/user-attachments/assets/88027652-d59f-48c3-b033-ba5e48785e35" />
+)
 *Figura 1. Diagrama de topología, con nombre, matrícula, dispositivos e interfaces.*
 
 ### 2.1 Direccionamiento IP
