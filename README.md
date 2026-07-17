@@ -13,9 +13,9 @@
 
 ## 🎥 Video demostrativo
 
-[![Ver video](./capturas/20_Topologia.png)](https://ENLACE-A-TU-VIDEO-AQUI)
+ 
 
-▶️ **[Haz clic aquí para ver el video completo](https://ENLACE-A-TU-VIDEO-AQUI)**
+▶️ **[Haz clic aquí para ver el video completo](https://youtu.be/ahc-m3bMVb0 )**
 
 ---
 
@@ -32,7 +32,8 @@ El presente proyecto tiene como objetivo diseñar e implementar una infraestruct
 
 ## 2. Topología de red
 
-![Topología de red](./capturas/20_Topologia.png)
+ <img width="934" height="655" alt="image" src="https://github.com/user-attachments/assets/6dd5d5c7-ea94-475a-b68e-6ec4ee443d91" />
+
 *Figura 1. Diagrama de topología, con nombre, matrícula, dispositivos e interfaces.*
 
 ### 2.1 Direccionamiento IP
@@ -56,13 +57,16 @@ Servidor `SRV-2025-1332`, promovido a Controlador de Dominio (`henryvicente.loca
 
 Se instalaron los roles RD Session Host, RD Connection Broker y RD Web Access, y se publicó Microsoft Edge como RemoteApp.
 
-![RemoteApp publicado](./capturas/01_RemoteAppPublicando.png)
+ <img width="829" height="550" alt="image" src="https://github.com/user-attachments/assets/1d910475-5411-45c2-8717-ab0fecddbafa" />
+
 *Figura 2. Colección RemoteApp con Microsoft Edge publicado.*
 
-![Login RD Web Access](./capturas/02_RDWebAccess-Login.png)
+ <img width="1016" height="732" alt="image" src="https://github.com/user-attachments/assets/4926f8fc-2ac6-4e6a-a9c7-acb5a5d9fd55" />
+
 *Figura 3. Formulario de autenticación de RD Web Access.*
 
-![RD Web Access logueado](./capturas/03_RDWebAccess-Logueado.png)
+ <img width="1011" height="775" alt="image" src="https://github.com/user-attachments/assets/660a8b64-ae43-426e-b0f6-a758bc185701" />
+
 *Figura 4. Portal RD Web Access autenticado.*
 
 ### 3.2 Servicio de RDP RemoteApp Web Client
@@ -77,25 +81,38 @@ Import-RDWebClientBrokerCert -Path "C:\BrokerCert.cer"
 Publish-RDWebClientPackage -Type Production -Latest
 ```
 
-![Login RD Web Client](./capturas/04_RDWebClient-Login.png)
+ <img width="1051" height="873" alt="image" src="https://github.com/user-attachments/assets/88458805-8167-4c2a-8c9f-410b53b2be00" />
+
 *Figura 5. Formulario de autenticación de RD Web Client (HTML5).*
 
-![RD Web Client logueado](./capturas/05_RDWebClient-Logueado.png)
+ <img width="1001" height="728" alt="image" src="https://github.com/user-attachments/assets/6c66c1e3-663b-4ba8-a724-3248f0cc34de" />
+
 *Figura 6. Portal RD Web Client autenticado.*
 
 ### 3.3 Página personalizada de IIS
 
-![Página IIS](./capturas/06_PaginaIIS.png)
+ <img width="938" height="693" alt="image" src="https://github.com/user-attachments/assets/2e7ebe95-9c4a-402b-ac65-4462b9c56db2" />
+
 *Figura 7. Página personalizada de IIS, accesible en http://10.32.1.10.*
 
 ### 3.4 Publicación de la página IIS en los RemoteApp
 
 El RemoteApp de Edge se configuró con el argumento `http://10.32.1.10`, cargando automáticamente la página al iniciarse desde cualquiera de los dos portales.
 
-![RemoteApp vía Web Access](./capturas/07_RemoteApp-MostrandoPaginaIIS_WebAccess.png)
+ <img width="1162" height="399" alt="image" src="https://github.com/user-attachments/assets/a420a58d-a2fe-4a5b-964e-88043026f9ea" />
+
+ <img width="536" height="336" alt="image" src="https://github.com/user-attachments/assets/2e93018d-4ff3-4e00-9d79-b063e8e4bfaf" />
+
+<img width="749" height="555" alt="image" src="https://github.com/user-attachments/assets/364f4c8d-9ed8-4509-b94a-aa1a348f3349" />
+
 *Figura 8. RemoteApp lanzado desde RD Web Access, mostrando la página IIS.*
 
-![RemoteApp vía Web Client](./capturas/08_RemoteApp-MostrandoPaginaIIS_WebClient.png)
+ <img width="871" height="615" alt="image" src="https://github.com/user-attachments/assets/54d71d8e-b727-41b2-94ed-40e08d857374" />
+
+<img width="877" height="601" alt="image" src="https://github.com/user-attachments/assets/07b82273-5189-4e3e-b13c-78ef3740e0ee" />
+
+<img width="974" height="702" alt="image" src="https://github.com/user-attachments/assets/f071c915-408f-4dc5-9e76-b1c0ae0ade9c" />
+
 *Figura 9. RemoteApp lanzado desde RD Web Client, mostrando la página IIS.*
 
 ### 3.5 Servicio NPS (RADIUS Server)
@@ -104,10 +121,12 @@ Se registró el router R1 como cliente RADIUS (IP `10.32.1.1`) y se crearon dos 
 
 #### 3.5.1 Grupo de nivel de acceso 15
 
-![Grupo Nivel 15](./capturas/09_GrupoNivel15.png)
+ <img width="476" height="517" alt="image" src="https://github.com/user-attachments/assets/5bb2fbff-745a-4339-a569-b80181f1a238" />
+
 *Figura 10. Grupo de seguridad NivelAcceso15 en Active Directory.*
 
-![Política Nivel 15](./capturas/10_PoliticaNivel15-AVPair.png)
+ <img width="863" height="531" alt="image" src="https://github.com/user-attachments/assets/e9bd5c25-41f9-4450-a02d-9ab708425372" />
+
 *Figura 11. Atributo Cisco-AV-Pair (`shell:priv-lvl=15`).*
 
 #### 3.5.2 Grupo de nivel de acceso 1
