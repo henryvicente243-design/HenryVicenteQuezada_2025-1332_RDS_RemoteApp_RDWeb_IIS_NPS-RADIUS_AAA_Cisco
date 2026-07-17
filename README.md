@@ -1,14 +1,15 @@
-RDS RemoteApp · RD Web Client · NPS-RADIUS en Router Cisco
+ RDS RemoteApp · RD Web Client · NPS-RADIUS en Router Cisco
 
 Práctica P5 — Implementación de una infraestructura de publicación de aplicaciones remotas (RemoteApp y RD Web Client) sobre Windows Server, integrada con un servidor NPS (RADIUS) para la autenticación centralizada y diferenciada por niveles de privilegio del acceso administrativo a un router Cisco.
 
-AutorHenry Vicente QuezadaMatrícula2025-1332PrácticaP5EntornoPNETLab + VMware Workstation
+**Autor** Henry Vicente Quezada **Matrícula** 2025-1332 PrácticaP5 EntornoPNETLab + VMware Workstation
 
 
 🎥 Video demostrativo
 
+Mostrar imagen
 
-▶️ https://youtu.be/ahc-m3bMVb0 
+▶️ Haz clic aquí para ver el video completo
 
 
 1. Objetivo de la red
