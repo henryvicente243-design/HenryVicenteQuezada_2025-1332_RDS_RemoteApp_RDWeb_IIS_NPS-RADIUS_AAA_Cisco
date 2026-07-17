@@ -1,6 +1,6 @@
 # RDS RemoteApp · RD Web Client · NPS-RADIUS en Router Cisco
 
-— Implementación de una infraestructura de publicación de aplicaciones remotas (RemoteApp y RD Web Client) sobre Windows Server, integrada con un servidor NPS (RADIUS) para la autenticación centralizada y diferenciada por niveles de privilegio del acceso administrativo a un router Cisco.
+Implementación de una infraestructura de publicación de aplicaciones remotas (RemoteApp y RD Web Client) sobre Windows Server, integrada con un servidor NPS (RADIUS) para la autenticación centralizada y diferenciada por niveles de privilegio del acceso administrativo a un router Cisco.
 
 | | |
 |---|---|
