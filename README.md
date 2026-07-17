@@ -1,208 +1,216 @@
- # Configuración de RDS RemoteApp, RD Web Client e IIS con Autenticación Centralizada NPS-RADIUS y AAA en Router Cisco
+RDS RemoteApp · RD Web Client · NPS-RADIUS en Router Cisco
 
-**Práctica P5**
-**Estudiante:** Henry Vicente Quezada
-**Matrícula:** 2025-1332
-**Institución:** Instituto Tecnológico de las Américas (ITLA)
+Práctica P5 — Implementación de una infraestructura de publicación de aplicaciones remotas (RemoteApp y RD Web Client) sobre Windows Server, integrada con un servidor NPS (RADIUS) para la autenticación centralizada y diferenciada por niveles de privilegio del acceso administrativo a un router Cisco.
 
-## Video de demostración
+AutorHenry Vicente QuezadaMatrícula2025-1332PrácticaP5EntornoPNETLab + VMware Workstation
 
- https://youtu.be/ahc-m3bMVb0
 
----
+🎥 Video demostrativo
 
-## 1. Objetivo de la red
 
-El objetivo de esta práctica es implementar un entorno de publicación de aplicaciones remotas mediante los servicios de Escritorio Remoto (RDS) de Windows Server, integrando dos métodos de acceso —RD Web Access y RD Web Client— para consumir una aplicación RemoteApp (Microsoft Edge) que despliega una página web personalizada alojada en IIS.
+▶️ https://youtu.be/ahc-m3bMVb0 
 
-De forma complementaria, se implementa un servidor NPS (Network Policy Server) actuando como servidor RADIUS, encargado de centralizar la autenticación y autorización de acceso administrativo a un router Cisco mediante AAA. El NPS diferencia dos niveles de privilegio (15 y 1) según el grupo de Active Directory al que pertenece el usuario, utilizando el atributo Cisco-AV-Pair para transmitir el nivel de privilegio correspondiente al dispositivo de red.
 
-Con esto se busca demostrar el funcionamiento integral de un esquema de autenticación centralizada (AAA vía RADIUS) aplicado tanto a servicios de aplicaciones remotas como a la administración de infraestructura de red, replicando un escenario típico de entorno empresarial.
+1. Objetivo de la red
 
-## 2. Topología de red
+El presente proyecto tiene como objetivo diseñar e implementar una infraestructura de red que integra publicación de aplicaciones remotas, control de identidad centralizado y administración segura de dispositivos de red. Concretamente, se busca:
 
-La topología está compuesta por un router (RTR-CORE-LAB) que interconecta dos segmentos de red: uno hacia el cliente Windows y otro hacia el servidor Windows, sin switches intermedios. El direccionamiento IP se derivó de los dígitos de la matrícula del estudiante (13 y 32).
 
-![Topología](capturas/20_Topologia.png)
+Publicar una página web corporativa alojada en un servidor IIS a través de dos mecanismos de acceso remoto: RD Web Access (RemoteApp clásico) y RD Web Client (acceso vía navegador HTML5).
+Centralizar la autenticación del acceso administrativo al router mediante un servidor RADIUS (NPS), eliminando la dependencia de credenciales locales únicas.
+Implementar dos niveles de autorización (privilegio 15 y privilegio 1) aplicados dinámicamente según el grupo de Active Directory del usuario.
+Validar el funcionamiento íntegro de la solución desde la perspectiva de un cliente final.
 
-### 2.1 Direccionamiento IP
 
-| Dispositivo | Interfaz | Dirección IP |
-|---|---|---|
-| Windows Client | NIC (VMnet6) | 10.13.1.10 /24 |
-| Router RTR-CORE-LAB | e0/0 (hacia Client) | 10.13.1.1 /24 |
-| Router RTR-CORE-LAB | e0/1 (hacia Server) | 10.32.1.1 /24 |
-| Windows Server (SRV-2025-1332) | NIC (VMnet7) | 10.32.1.10 /24 |
 
-No se utilizaron VLANs en esta topología; la segmentación se realiza a nivel de interfaz física/routing directo entre las dos subredes.
+2. Topología de red
 
-## 3. Configuración del Windows Server
+Mostrar imagen
+Figura 1. Diagrama de topología, con nombre, matrícula, dispositivos e interfaces.
 
-### 3.1 Instalación de Active Directory Domain Services
+2.1 Direccionamiento IP
 
-El servidor se promovió a Controlador de Dominio (DC), requisito previo para la instalación de RDS mediante el asistente Quick Start.
+DispositivoInterfazIPMáscaraRolRouter R1Ethernet0/010.13.1.1/24Gateway red ClienteRouter R1Ethernet0/110.32.1.1/24Gateway red ServerWindows ClientEthernet010.13.1.10/24Estación clienteWindows ServerEthernet0 (VMnet7)10.32.1.10/24IIS / RDS / NPS / AD DS
 
-| Parámetro | Valor |
-|---|---|
-| Hostname | SRV-2025-1332 |
-| Dominio (FQDN) | henryvicente.local |
-| NetBIOS | HENRYVICENTE |
 
-### 3.2 Configuración de página personalizada en IIS
+Direccionamiento basado en la matrícula del estudiante (1332). No se emplearon VLANs; cada host conecta directamente a su interfaz correspondiente en el router.
 
-Se configuró una página HTML personalizada, identificada con el nombre y matrícula del estudiante, ubicada en `C:\inetpub\wwwroot\index.html`.
 
-![Página IIS](capturas/06_PaginaIIS.png)
 
-### 3.3 Certificado SSL autofirmado
 
-Se generó un certificado SSL autofirmado mediante `New-SelfSignedCertificate` con la extensión de uso "Server Authentication", necesaria para evitar el error `ERR_SSL_KEY_USAGE_INCOMPATIBLE`. Debido a incompatibilidad del cmdlet `Export-PfxCertificate` con el asistente de RDS, la exportación del certificado se realizó con `certutil -exportPFX`.
+3. Configuración del Windows Server
 
-### 3.4 Instalación de RDS y publicación de RemoteApp
+Servidor SRV-2025-1332, promovido a Controlador de Dominio (henryvicente.local), requisito necesario para completar la instalación de Servicios de Escritorio remoto.
 
-Se instalaron los roles de Session Host, Connection Broker y Web Access mediante el asistente Quick Start de RDS. Se publicó como RemoteApp la aplicación Microsoft Edge, configurada con el argumento `http://10.32.1.10` para que abra automáticamente la página personalizada de IIS al ejecutarse.
+3.1 Servicio de RDP RemoteApp
 
-![RemoteApp publicando](capturas/01_RemoteAppPublicando.png)
+Se instalaron los roles RD Session Host, RD Connection Broker y RD Web Access, y se publicó Microsoft Edge como RemoteApp.
 
-### 3.5 Servicio RD Web Access
+Mostrar imagen
+Figura 2. Colección RemoteApp con Microsoft Edge publicado.
 
-Disponible en `https://10.32.1.10/RDWeb`, donde el usuario se autentica con sus credenciales de dominio para visualizar las aplicaciones publicadas.
+Mostrar imagen
+Figura 3. Formulario de autenticación de RD Web Access.
 
-![Login RD Web Access](capturas/02_RDWebAccess-Login.png)
-![Logueado RD Web Access](capturas/03_RDWebAccess-Logueado.png)
-![RemoteApp vía Web Access](capturas/07_RemoteApp-MostrandoPaginaIIS_WebAccess.png)
+Mostrar imagen
+Figura 4. Portal RD Web Access autenticado.
 
-### 3.6 Servicio RD Web Client
+3.2 Servicio de RDP RemoteApp Web Client
 
-Versión HTML5, disponible en `https://10.32.1.10/RDWeb/webclient`. Su puesta en marcha requirió actualizar el módulo `PowerShellGet` e importar el certificado del broker con `Import-RDWebClientBrokerCert`.
+Componente HTML5 instalado vía PowerShell (RDWebClientManagement), disponible en /RDWeb/webclient.
 
-![Login RD Web Client](capturas/04_RDWebClient-Login.png)
-![Logueado RD Web Client](capturas/05_RDWebClient-Logueado.png)
-![RemoteApp vía Web Client](capturas/08_RemoteApp-MostrandoPaginaIIS_WebClient.png)
+powershellInstall-Module -Name RDWebClientManagement -Force
+Import-Module RDWebClientManagement
+Install-RDWebClientPackage
+Import-RDWebClientBrokerCert -Path "C:\BrokerCert.cer"
+Publish-RDWebClientPackage -Type Production -Latest
 
-### 3.7 Configuración de NPS (RADIUS Server)
+Mostrar imagen
+Figura 5. Formulario de autenticación de RD Web Client (HTML5).
 
-Se configuró el rol NPS actuando como servidor RADIUS. El router fue registrado como cliente RADIUS con la IP 10.32.1.1 (interfaz e0/1).
+Mostrar imagen
+Figura 6. Portal RD Web Client autenticado.
 
-**Grupos de Active Directory por nivel de acceso:**
-- `NivelAcceso15` — privilegio administrativo completo (privilege 15)
-- `NivelAcceso1` — privilegio de solo consulta (privilege 1)
+3.3 Página personalizada de IIS
 
-![Grupo Nivel 15](capturas/09_GrupoNivel15.png)
-![Grupo Nivel 1](capturas/11_GrupoNivel1.png)
+Mostrar imagen
+Figura 7. Página personalizada de IIS, accesible en http://10.32.1.10.
 
-**Usuarios de prueba:**
-- `adminradius` — miembro de `NivelAcceso15`
-- `userradius` — miembro de `NivelAcceso1`
-- Contraseña (ambos): `R4dius#2025`
+3.4 Publicación de la página IIS en los RemoteApp
 
-**Políticas de red NPS y atributo Cisco-AV-Pair:**
+El RemoteApp de Edge se configuró con el argumento http://10.32.1.10, cargando automáticamente la página al iniciarse desde cualquiera de los dos portales.
 
-Se configuraron dos políticas de red, una por grupo, devolviendo el atributo `Cisco-AV-Pair` con el nivel de privilegio correspondiente. Fue necesario ajustar `Service-Type` a "NAS Prompt" y eliminar `Framed-Protocol PPP`, ya que su presencia generaba el error *"This line may not run PPP"* durante el intento de conexión SSH.
+Mostrar imagen
+Figura 8. RemoteApp lanzado desde RD Web Access, mostrando la página IIS.
 
-![Política Nivel 15](capturas/10_PoliticaNivel15-AVPair.png)
-![Política Nivel 1](capturas/12_PoliticaNivel1-AVPair.png)
+Mostrar imagen
+Figura 9. RemoteApp lanzado desde RD Web Client, mostrando la página IIS.
 
-## 4. Configuración del Router
+3.5 Servicio NPS (RADIUS Server)
 
-### 4.1 Usuario local y contraseñas de acceso
+Se registró el router R1 como cliente RADIUS (IP 10.32.1.1) y se crearon dos grupos de seguridad en AD, cada uno con su política de red y atributo Cisco-AV-Pair.
 
-Usuario local con privilegio 15 como respaldo (fallback) ante indisponibilidad del servidor RADIUS, más la contraseña de modo privilegiado:
+3.5.1 Grupo de nivel de acceso 15
 
-```
+Mostrar imagen
+Figura 10. Grupo de seguridad NivelAcceso15 en Active Directory.
+
+Mostrar imagen
+Figura 11. Atributo Cisco-AV-Pair (shell:priv-lvl=15).
+
+3.5.2 Grupo de nivel de acceso 1
+
+Mostrar imagen
+Figura 12. Grupo de seguridad NivelAcceso1 en Active Directory.
+
+Mostrar imagen
+Figura 13. Atributo Cisco-AV-Pair (shell:priv-lvl=1).
+
+
+4. Configuración del Router
+
+4.1 Usuario local
+
 username admin privilege 15 secret Cisco123!
+
+Mostrar imagen
+Figura 14. Usuario local (show run | include username).
+
+4.2 Contraseña para el modo de configuración
+
 enable secret Cisco123!
-```
 
-![Usuario local](capturas/13_UsuarioLocal.png)
+4.3 AAA configurado para autenticar vía RADIUS
 
-### 4.2 Configuración de AAA para autenticación vía RADIUS
-
-```
 aaa new-model
 aaa authentication login default group radius local
 aaa authorization exec default group radius local
+
 radius server NPS-SERVER
  address ipv4 10.32.1.10 auth-port 1812 acct-port 1813
  key RadiusKey123!
-```
 
-> **Nota técnica:** se descartó `aaa authentication enable default group radius enable`, ya que no era requisito del enunciado y generaba fallos por el usuario especial `$enab15$` que RADIUS espera para autenticar el modo enable de forma independiente.
+Mostrar imagen
+Figura 15. Configuración AAA completa (show run | section aaa).
 
-![Configuración AAA](capturas/14_AAA-Config.png)
+4.4 Logs de autenticación, autorización y RADIUS
 
-### 4.3 Logs de autenticación, autorización y RADIUS
-
-```
 terminal monitor
 debug aaa authentication
 debug aaa authorization
 debug radius
-```
 
-![Debugs AAA/RADIUS](capturas/15_Debugs-Authentication-Authorization-Radius.png)
+Mostrar imagen
+Figura 16. Salida combinada de los tres debugs durante una autenticación SSH exitosa.
 
-## 5. Pruebas y validación desde el cliente
-
-### 5.1 Conectividad
-
-![Ping cliente-servidor](capturas/21_Ping_de_windowsClient.png)
-
-### 5.2 SSH vía RADIUS — usuario nivel 15
-
-```
-ssh -l adminradius 10.13.1.1
-Password: R4dius#2025
-```
-
-El usuario ingresó directamente en modo privilegiado (`RTR-CORE-LAB#`), confirmado con `show privilege` (nivel 15).
-
-![SSH nivel 15](capturas/18_SSH-Nivel15.png)
-
-### 5.3 SSH vía RADIUS — usuario nivel 1
-
-```
-ssh -l userradius 10.13.1.1
-Password: R4dius#2025
-```
-
-El usuario ingresó en modo usuario (`RTR-CORE-LAB>`), confirmado con `show privilege` (nivel 1).
-
-![SSH nivel 1](capturas/19_SSH-Nivel1.png)
-
-### 5.4 Verificación final del servidor RADIUS y sesiones activas
-
-```
-undebug all
 show aaa servers
-```
 
-Confirmó que el servidor RADIUS estaba activo (`State: current UP`), con 5 solicitudes enviadas, 3 aceptadas y 2 rechazadas durante las pruebas.
+Mostrar imagen
+Figura 17. Servidor RADIUS activo (state: current UP).
 
-![show aaa servers](capturas/16_ShowAAAServers.png)
-
-```
 show aaa sessions
-```
 
-Mostró la sesión activa del usuario `adminradius`, autenticado desde 10.13.1.10.
+Mostrar imagen
+Figura 18. Sesión SSH activa autenticada vía RADIUS.
 
-![show aaa sessions](capturas/17_ShowAAASessions.png)
 
-## 6. Incidencias resueltas durante el proyecto
+5. Pruebas desde el Cliente
 
-- El asistente Quick Start de RDS requería un dominio activo → se promovió el servidor a Controlador de Dominio.
-- Error `ERR_SSL_KEY_USAGE_INCOMPATIBLE` en el certificado SSL → resuelto regenerándolo con la extensión Server Authentication.
-- Incompatibilidad de `Export-PfxCertificate` con el asistente de RDS → resuelto con `certutil -exportPFX`.
-- RD Web Client sin acceso a internet → resuelto ajustando DNS/NAT del servidor.
-- Certificado del broker faltante para RD Web Client → resuelto con `Import-RDWebClientBrokerCert`.
-- Contraseña de AD rechazada por contener el nombre de usuario → ajustada conforme a políticas de complejidad.
-- Error *"This line may not run PPP"* en SSH → corregido `Service-Type` y eliminado `Framed-Protocol PPP` en la política NPS.
-- Ruta por defecto duplicada/obsoleta en el Windows Server → eliminada con `route delete`.
+5.1 Consulta de la página vía los dos RemoteApp
 
-## 7. Conclusiones
+Ya documentado en la sección 3.4 (Figuras 8 y 9).
 
-La práctica permitió integrar de forma funcional dos frentes de la infraestructura de TI: la publicación de aplicaciones remotas mediante RDS (RD Web Access y RD Web Client) y la administración segura de un dispositivo de red mediante autenticación centralizada AAA/RADIUS. Se comprobó que el atributo Cisco-AV-Pair, distribuido desde políticas de NPS diferenciadas por grupo de Active Directory, permite asignar de forma dinámica distintos niveles de privilegio (15 y 1) a los usuarios que acceden por SSH al router, sin necesidad de mantener credenciales ni permisos de forma local en cada dispositivo.
+5.2 Prueba de conexión SSH al router vía RADIUS
 
-Asimismo, el proceso evidenció la importancia de resolver dependencias de infraestructura (promoción a Controlador de Dominio, gestión de certificados SSL, corrección de atributos RADIUS específicos de Cisco) para lograr un entorno funcional de extremo a extremo, replicando condiciones similares a las de un entorno de producción empresarial.
+Usuario nivel de acceso 15 (adminradius)
 
+ssh -l adminradius 10.13.1.1
+
+La sesión inicia directamente en modo privilegiado (RTR-CORE-LAB#).
+
+Mostrar imagen
+Figura 19. Sesión SSH con privilegio 15 (show privilege).
+
+Usuario nivel de acceso 1 (userradius)
+
+ssh -l userradius 10.13.1.1
+
+La sesión queda en modo restringido (RTR-CORE-LAB>).
+
+Mostrar imagen
+Figura 20. Sesión SSH con privilegio 1 (show privilege).
+
+5.3 Conectividad de red
+
+Mostrar imagen
+Figura 21. Ping entre Windows Client y Windows Server, enrutado a través de R1.
+
+
+6. Conclusiones
+
+La implementación permitió integrar la publicación de aplicaciones remotas (RemoteApp y RD Web Client), un servidor web con contenido personalizado (IIS), y un esquema de autenticación centralizada para el acceso administrativo a un router Cisco mediante NPS/RADIUS.
+
+Se comprobó que el atributo Cisco-AV-Pair, configurado en las políticas de red de NPS, permite asignar de forma dinámica el nivel de privilegio de un usuario administrativo sin mantener múltiples cuentas locales en el router, centralizando dicha gestión en Active Directory.
+
+El proyecto cumple con la totalidad de los requisitos: instalación y publicación de los servicios RDS, configuración del NPS con los dos niveles de acceso solicitados, y configuración del router con AAA vía RADIUS, usuario local de respaldo, y los logs de verificación correspondientes.
+
+
+📂 Estructura del repositorio
+
+.
+├── README.md
+├── HenryVicenteQuezada_2025-1332_P5.zip
+├── docs/
+│   └── HenryVicenteQuezada_2025-1332_Informe_P5.pdf
+├── configs/
+│   └── router_config.txt
+└── capturas/
+    ├── 01_RemoteAppPublicando.png
+    ├── 02_RDWebAccess-Login.png
+    ├── ...
+    └── 21_Ping_de_windowsClient.png
+
+
+⚠️ Nota de integridad académica
+
+Este proyecto fue desarrollado de forma individual. Cualquier indicio de fraude o copia equivale a la descalificación total de la asignación.
