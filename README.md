@@ -131,10 +131,12 @@ Se registró el router R1 como cliente RADIUS (IP `10.32.1.1`) y se crearon dos 
 
 #### 3.5.2 Grupo de nivel de acceso 1
 
-![Grupo Nivel 1](./capturas/11_GrupoNivel1.png)
+ <img width="403" height="459" alt="image" src="https://github.com/user-attachments/assets/44db3d09-9b58-42a5-954e-1edf6f730e66" />
+
 *Figura 12. Grupo de seguridad NivelAcceso1 en Active Directory.*
 
-![Política Nivel 1](./capturas/12_PoliticaNivel1-AVPair.png)
+ <img width="802" height="584" alt="image" src="https://github.com/user-attachments/assets/d2989987-1c4f-4d92-b403-c97d9fff6b04" />
+
 *Figura 13. Atributo Cisco-AV-Pair (`shell:priv-lvl=1`).*
 
 ---
@@ -147,7 +149,8 @@ Se registró el router R1 como cliente RADIUS (IP `10.32.1.1`) y se crearon dos 
 username admin privilege 15 secret Cisco123!
 ```
 
-![Usuario local](./capturas/13_UsuarioLocal.png)
+ <img width="781" height="395" alt="image" src="https://github.com/user-attachments/assets/ff5eb8f9-3ecf-4331-9594-6b51ba7caef3" />
+
 *Figura 14. Usuario local (`show run | include username`).*
 
 ### 4.2 Contraseña para el modo de configuración
@@ -168,7 +171,8 @@ radius server NPS-SERVER
  key RadiusKey123!
 ```
 
-![AAA config](./capturas/14_AAA-Config.png)
+ <img width="639" height="300" alt="image" src="https://github.com/user-attachments/assets/0b336417-984e-4542-8a41-616454eea15e" />
+
 *Figura 15. Configuración AAA completa (`show run | section aaa`).*
 
 ### 4.4 Logs de autenticación, autorización y RADIUS
@@ -180,17 +184,20 @@ debug aaa authorization
 debug radius
 ```
 
-![Debugs](./capturas/15_Debugs-Authentication-Authorization-Radius.png)
+ <img width="706" height="398" alt="image" src="https://github.com/user-attachments/assets/c241feab-1fe0-4c6a-ae6e-4ca09588c058" />
+
 *Figura 16. Salida combinada de los tres debugs durante una autenticación SSH exitosa.*
 
 #### show aaa servers
 
-![show aaa servers](./capturas/16_ShowAAAServers.png)
+ <img width="974" height="697" alt="image" src="https://github.com/user-attachments/assets/93832a71-fd03-4ae2-907b-b0449a5fa882" />
+
 *Figura 17. Servidor RADIUS activo (`state: current UP`).*
 
 #### show aaa sessions
 
-![show aaa sessions](./capturas/17_ShowAAASessions.png)
+ <img width="653" height="219" alt="image" src="https://github.com/user-attachments/assets/fa15b865-02d3-4806-952f-ccda7c355608" />
+
 *Figura 18. Sesión SSH activa autenticada vía RADIUS.*
 
 ---
@@ -211,7 +218,8 @@ ssh -l adminradius 10.13.1.1
 
 La sesión inicia directamente en modo privilegiado (`RTR-CORE-LAB#`).
 
-![SSH nivel 15](./capturas/18_SSH-Nivel15.png)
+ <img width="656" height="288" alt="image" src="https://github.com/user-attachments/assets/5aceb42c-3f40-4c99-beae-374cd951f96a" />
+
 *Figura 19. Sesión SSH con privilegio 15 (`show privilege`).*
 
 #### Usuario nivel de acceso 1 (`userradius`)
@@ -222,12 +230,14 @@ ssh -l userradius 10.13.1.1
 
 La sesión queda en modo restringido (`RTR-CORE-LAB>`).
 
-![SSH nivel 1](./capturas/19_SSH-Nivel1.png)
+ <img width="745" height="250" alt="image" src="https://github.com/user-attachments/assets/df5024c8-a3ee-4024-906e-757c30da3d6f" />
+
 *Figura 20. Sesión SSH con privilegio 1 (`show privilege`).*
 
 ### 5.3 Conectividad de red
 
-![Ping](./capturas/21_Ping_de_windowsClient.png)
+ <img width="603" height="565" alt="image" src="https://github.com/user-attachments/assets/a4f980c6-334b-4aae-a4db-b20508b2c714" />
+
 *Figura 21. Ping entre Windows Client y Windows Server, enrutado a través de R1.*
 
 ---
