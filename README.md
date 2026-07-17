@@ -13,9 +13,8 @@
 
 ## 🎥 Video demostrativo
 
-[![Ver video](./capturas/20_Topologia.png)](https://ENLACE-A-TU-VIDEO-AQUI)
 
-▶️ **[Haz clic aquí para ver el video completo](https://ENLACE-A-TU-VIDEO-AQUI)**
+▶️ **[Haz clic aquí para ver el video completo](https://youtu.be/ahc-m3bMVb0 )**
 
 ---
 
