@@ -56,13 +56,15 @@ Servidor `SRV-2025-1332`, promovido a Controlador de Dominio (`henryvicente.loca
 
 Se instalaron los roles RD Session Host, RD Connection Broker y RD Web Access, y se publicó Microsoft Edge como RemoteApp.
 
-![RemoteApp publicado](./capturas/01_RemoteAppPublicando.png)
+ <img width="320" height="264" alt="01_RemoteAppPublicando" src="https://github.com/user-attachments/assets/2fe7692e-2f63-44c6-a8c0-205d99746d3c" />
+
 *Figura 2. Colección RemoteApp con Microsoft Edge publicado.*
 
-![Login RD Web Access](./capturas/02_RDWebAccess-Login.png)
+ <img width="578" height="416" alt="02_RDWebAccess-Login" src="https://github.com/user-attachments/assets/78d64786-6c82-4453-84f5-19b813b34b73" />
+
 *Figura 3. Formulario de autenticación de RD Web Access.*
 
-![RD Web Access logueado](./capturas/03_RDWebAccess-Logueado.png)
+ <img width="578" height="414" alt="03_RDWebAccess-Logueado" src="https://github.com/user-attachments/assets/f88a51db-b466-48de-94f4-eb3d0af72e67" />
 *Figura 4. Portal RD Web Access autenticado.*
 
 ### 3.2 Servicio de RDP RemoteApp Web Client
@@ -77,10 +79,10 @@ Import-RDWebClientBrokerCert -Path "C:\BrokerCert.cer"
 Publish-RDWebClientPackage -Type Production -Latest
 ```
 
-![Login RD Web Client](./capturas/04_RDWebClient-Login.png)
+ <img width="576" height="441" alt="04_RDWebClient-Login" src="https://github.com/user-attachments/assets/28bfd7b2-eff5-438b-bb9f-0e3b950213f6" />
 *Figura 5. Formulario de autenticación de RD Web Client (HTML5).*
 
-![RD Web Client logueado](./capturas/05_RDWebClient-Logueado.png)
+ <img width="574" height="417" alt="05_RDWebClient-Logueado" src="https://github.com/user-attachments/assets/4ab56a14-f9f4-4a0d-872c-3f97f2704962" />
 *Figura 6. Portal RD Web Client autenticado.*
 
 ### 3.3 Página personalizada de IIS
